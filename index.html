@@ -3,645 +3,364 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ysabeau+Infant:ital,wght@0,1..1000;1,1..1000&display=swap" rel="stylesheet">
-
     <title>Gallery - Hafsa Abbasi</title>
     <style>
-      * {
-        cursor: none !important;
+      * { cursor: none !important; box-sizing: border-box; margin: 0; padding: 0; }
+
+      .custom-cursor { position:fixed; width:8px; height:8px; background:rgba(255,215,0,0.9); border-radius:50%; pointer-events:none; z-index:100000; transition:transform 0.15s ease-out; box-shadow:0 0 15px rgba(255,215,0,0.6),0 0 25px rgba(255,215,0,0.3); }
+      .cursor-ring { position:fixed; width:40px; height:40px; border:1px solid rgba(255,215,0,0.4); border-radius:50%; pointer-events:none; z-index:99999; transition:all 0.2s ease-out; box-shadow:0 0 20px rgba(255,215,0,0.2); }
+      .cursor-sparkle { position:fixed; width:4px; height:4px; background:rgba(255,215,0,0.8); border-radius:50%; pointer-events:none; z-index:99997; animation:sparkle-fade 0.8s ease-out forwards; }
+      @keyframes sparkle-fade { 0%{opacity:1;transform:scale(1);} 100%{opacity:0;transform:scale(0.3);} }
+      .cursor-ring.hover { width:60px; height:60px; border-color:rgba(255,215,0,0.7); border-width:2px; }
+      .custom-cursor.hover { transform:scale(0.6); background:rgba(255,215,0,1); }
+
+      #starfield { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1; pointer-events:none; }
+
+      body { background:#000; color:#fff; font-family:'Ysabeau Infant',sans-serif; min-height:100vh; }
+
+      @font-face { font-family:'TheScientist'; src:url('TheScientist-L3EyW.woff') format('woff'),url('TheScientist-L3EyW.ttf') format('truetype'); }
+
+      .scroll-progress { position:fixed; top:0; right:60px; height:100vh; width:2px; background:rgba(255,215,0,0.1); z-index:50; pointer-events:none; }
+      .progress-line { position:absolute; top:0; left:0; width:100%; height:0%; background:linear-gradient(180deg,rgba(133,120,150,0.3) 0%,rgba(133,120,150,0.8) 50%,rgba(133,120,150,1) 100%); transition:height 0.1s ease-out; }
+      .progress-glow { position:absolute; bottom:0; left:50%; transform:translateX(-50%); width:8px; height:8px; background:rgba(133,120,150,1); border-radius:50%; box-shadow:0 0 15px rgba(133,120,150,0.8); opacity:0; transition:bottom 0.1s ease-out,opacity 0.3s ease-out; }
+
+      .close-btn { position:fixed; top:40px; right:100px; font-size:40px; color:rgba(255,169,88,1); text-decoration:none; z-index:100; transition:transform 0.3s,color 0.3s; font-weight:300; line-height:1; }
+      .close-btn:hover { transform:rotate(90deg); color:rgba(255,215,0,1); }
+
+      /* PAGE */
+      .page-wrapper { max-width:1200px; margin:0 auto; padding:0 60px 120px; }
+
+      /* HEADER */
+      .page-header { padding-top:140px; padding-bottom:60px; }
+      .project-title { font-family:'TheScientist',cursive; font-size:52px; color:rgba(255,169,88,1); margin-bottom:14px; }
+      .page-subtitle { font-size:14px; color:rgba(255,255,255,0.4); letter-spacing:1px; font-weight:300; }
+
+      /* MASONRY GRID — CSS columns */
+      .masonry {
+        columns: 3;
+        column-gap: 16px;
       }
 
-      /* Main cursor dot */
-      .custom-cursor {
-        position: fixed;
-        width: 8px;
-        height: 8px;
-        background: rgba(255, 215, 0, 0.9);
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 100000;
-        transition: transform 0.15s ease-out, opacity 0.15s ease-out;
-        box-shadow: 0 0 15px rgba(255, 215, 0, 0.6),
-          0 0 25px rgba(255, 215, 0, 0.3);
+      .masonry-item {
+        break-inside: avoid;
+        margin-bottom: 16px;
+        border-radius: 12px;
+        overflow: hidden;
+        position: relative;
+        cursor: zoom-in !important;
+        border: 1px solid rgba(255,169,88,0.08);
       }
 
-      /* Outer ring */
-      .cursor-ring {
-        position: fixed;
-        width: 40px;
-        height: 40px;
-        border: 1px solid rgba(255, 215, 0, 0.4);
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 99999;
-        transition: all 0.2s ease-out;
-        box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
-      }
+      /* Vary the first item in every 5 to span feel */
+      .masonry-item:nth-child(7n+1) { margin-bottom: 16px; }
 
-      /* Sparkle trail */
-      .cursor-sparkle {
-        position: fixed;
-        width: 4px;
-        height: 4px;
-        background: rgba(255, 215, 0, 0.8);
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 99997;
-        animation: sparkle-fade 0.8s ease-out forwards;
-        box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
-      }
-
-      @keyframes sparkle-fade {
-        0% {
-          opacity: 1;
-          transform: scale(1);
-        }
-
-        100% {
-          opacity: 0;
-          transform: scale(0.3);
-        }
-      }
-
-      .cursor-ring.hover {
-        width: 60px;
-        height: 60px;
-        border-color: rgba(255, 215, 0, 0.7);
-        border-width: 2px;
-      }
-
-      .custom-cursor.hover {
-        transform: scale(0.6);
-        background: rgba(255, 215, 0, 1);
-      }
-
-      #starfield {
-        position: fixed;
-        top: 0;
-        left: 0;
+      .masonry-item img {
         width: 100%;
-        height: 100%;
-        z-index: -1;
+        height: auto;
+        display: block;
+        transition: transform 0.5s ease, filter 0.4s ease;
+      }
+
+      /* Gold shimmer on hover */
+      .masonry-item::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(255,169,88,0.0);
+        transition: background 0.3s ease;
+        pointer-events: none;
+        border-radius: 12px;
+      }
+
+      .masonry-item:hover img { transform: scale(1.04); filter: brightness(0.85); }
+      .masonry-item:hover::after { background: rgba(255,169,88,0.06); }
+
+      /* Expand icon on hover */
+      .masonry-item .expand-icon {
+        position: absolute;
+        bottom: 12px; right: 12px;
+        width: 32px; height: 32px;
+        background: rgba(0,0,0,0.5);
+        border: 1px solid rgba(255,169,88,0.4);
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        opacity: 0; transition: opacity 0.3s ease;
         pointer-events: none;
       }
+      .masonry-item:hover .expand-icon { opacity: 1; }
+      .expand-icon svg { width:14px; height:14px; color:rgba(255,169,88,0.9); }
 
-      body {
-        margin: 0;
-        padding: 0;
-        background-color: #000;
-        color: #fff;
-        font-family: 'Ysabeau Infant', sans-serif;
+      /* Banner item — full width below masonry */
+      .banner-item {
+        width: 70%;
+        margin: 8px auto 0;
+        display: block;
+      }
+
+      /* LIGHTBOX */
+      .lightbox {
+        position: fixed; inset: 0;
+        background: rgba(0,0,0,0.96);
+        z-index: 200000;
+        display: flex; align-items: center; justify-content: center;
+        opacity: 0; pointer-events: none;
+        transition: opacity 0.3s ease;
+        backdrop-filter: blur(16px);
+      }
+      .lightbox.active { opacity:1; pointer-events:all; }
+
+      .lightbox-img-wrap {
         position: relative;
-        min-height: 100vh;
+        max-width: 88vw; max-height: 88vh;
+        display: flex; align-items: center; justify-content: center;
       }
 
-      .page-wrapper {
-        width: 1440px;
-        margin: 0 auto;
-        position: relative;
+      .lightbox img {
+        max-width: 88vw; max-height: 88vh;
+        border-radius: 12px;
+        box-shadow: 0 40px 100px rgba(0,0,0,0.9);
+        transform: scale(0.96); transition: transform 0.3s ease;
+        object-fit: contain;
+        cursor: zoom-out !important;
+        display: block;
       }
+      .lightbox.active img { transform: scale(1); }
 
-      .container {
-        width: 1200px;
-        margin: 0 auto;
-        padding: 0;
+      /* Close */
+      .lightbox-close {
+        position: fixed; top:32px; right:60px;
+        font-size:40px; color:rgba(255,169,88,1);
+        background:none; border:none; z-index:200001;
+        transition:transform 0.3s,color 0.3s; font-weight:300; line-height:1;
       }
+      .lightbox-close:hover { transform:rotate(90deg); color:rgba(255,215,0,1); }
 
-      @font-face {
-        font-family: 'TheScientist';
-        src: url('TheScientist-L3EyW.ttf') format('truetype');
-      }
-
-      /* Close Button */
-      .close-btn {
+      /* Prev / Next arrows */
+      .lightbox-nav {
         position: fixed;
-        top: 40px;
-        right: 60px;
-        font-size: 40px;
-        color: rgba(255, 169, 88, 1);
-        text-decoration: none;
-        z-index: 100;
-        transition: transform 0.3s, color 0.3s;
-        font-weight: 300;
+        top: 50%; transform: translateY(-50%);
+        background: rgba(0,0,0,0.4);
+        border: 1px solid rgba(255,169,88,0.25);
+        border-radius: 50%;
+        width: 52px; height: 52px;
+        display: flex; align-items: center; justify-content: center;
+        color: rgba(255,169,88,0.8);
+        transition: all 0.3s ease;
+        z-index: 200001;
       }
+      .lightbox-nav:hover { background:rgba(255,169,88,0.1); border-color:rgba(255,169,88,0.6); color:rgba(255,169,88,1); }
+      .lightbox-nav svg { width:20px; height:20px; }
+      #lightboxPrev { left: 24px; }
+      #lightboxNext { right: 24px; }
 
-      .close-btn:hover {
-        transform: rotate(90deg);
-        color: rgba(255, 215, 0, 1);
+      /* Counter */
+      .lightbox-counter {
+        position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%);
+        font-size: 12px; letter-spacing: 2px; color: rgba(255,169,88,0.4);
+        z-index: 200001;
       }
-
-      /* Project Content */
-      .project-content {
-        padding: 150px 0 100px 0;
-      }
-
-      .project-header {
-        margin-bottom: 80px;
-      }
-
-      .project-title {
-        font-family: 'TheScientist', cursive;
-        font-size: 60px;
-        color: rgba(255, 169, 88, 1);
-        margin-bottom: 20px;
-      }
-
-
-      
-      
-      .scroll-progress {
-  position: fixed;
-  top: 0;
-  right: 60px;
-  height: 100vh;
-  width: 2px;
-  background: rgba(255, 215, 0, 0.1);
-  z-index: 50;
-  pointer-events: none;
-}
-
-.progress-line {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 0%;
-  background: linear-gradient(180deg, 
-    rgba(133, 120, 150, 0.3) 0%, 
-    rgba(133, 120, 150, 0.8) 50%, 
-    rgba(133, 120, 150, 1) 100%);
-  box-shadow: 0 0 10px rgba(133, 120, 150, 0.5);
-  transition: height 0.1s ease-out;
-}
-
-.progress-glow {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 8px;
-  height: 8px;
-  background: rgba(133, 120, 150, 1);
-  border-radius: 50%;
-  box-shadow: 0 0 15px rgba(133, 120, 150, 0.8),
-              0 0 25px rgba(133, 120, 150, 0.5);
-  opacity: 0;
-  transition: bottom 0.1s ease-out, opacity 0.3s ease-out;
-}
-      
-      /* Modal styles */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 10001;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.95);
-  backdrop-filter: blur(10px);
-}
-
-.modal.active {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: fadeIn 0.3s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.modal-content {
-  max-width: 90%;
-  max-height: 90vh;
-  object-fit: contain;
-  border-radius: 20px;
-  border: 2px solid rgba(255, 169, 88, 0.3);
-  box-shadow: 0 0 50px rgba(255, 169, 88, 0.3);
-  animation: zoomIn 0.3s ease-out;
-}
-
-@keyframes zoomIn {
-  from {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-.modal-close {
-  position: absolute;
-  top: 30px;
-  right: 50px;
-  font-size: 50px;
-  color: rgba(255, 169, 88, 1);
-  transition: transform 0.3s, color 0.3s;
-  font-weight: 300;
-}
-
-.modal-close:hover {
-  transform: rotate(90deg);
-  color: rgba(255, 215, 0, 1);
-}
-
-.grid-image {
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.grid-image:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0 30px rgba(255, 169, 88, 0.3);
-}
-      /* Gallery Grid */
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 30px;
-  margin-top: 50px;
-}
-
-.gallery-grid img {
-  width: 100%;
-  height: auto;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 169, 88, 0.2);
-}
     </style>
   </head>
-
   <body>
-    
-    
-    <div class="scroll-progress">
-  <div class="progress-line"></div>
-  <div class="progress-glow"></div>
-</div>
+    <div class="scroll-progress"><div class="progress-line"></div><div class="progress-glow"></div></div>
     <canvas id="starfield"></canvas>
-
     <div class="custom-cursor"></div>
     <div class="cursor-ring"></div>
+    <a href="https://hafsa5511.github.io/portfolio/index.html" class="close-btn">&#x2715;</a>
 
-    <a href="https://hafsa5511.github.io/portfolio/index.html" class="close-btn">✕</a>
-
-   
-<div class="page-wrapper">
-  <div class="container">
-    <div class="project-content">
-      <div class="project-header">
-        <h1 class="project-title">Gallery</h1>
+    <div class="page-wrapper">
+      <div class="page-header">
+        <h1 class="project-title">Traditional Art Gallery</h1>
+        <p class="page-subtitle">Illustrations &nbsp;·&nbsp; Sketchbook &nbsp;·&nbsp; Mixed Media</p>
       </div>
 
-      <div class="gallery-grid">
-        <img src="fishy skull.png" alt="Gallery Image 1" class="grid-image">
-        <img src="Screenshot 2026-01-04 181458.png" alt="Gallery Image 2" class="grid-image">
-        <img src="Screenshot 2026-01-04 181523.png" alt="Gallery Image 3" class="grid-image">
-        <img src="Screenshot 2026-01-04 181538.png" alt="Gallery Image 4" class="grid-image">
-      
-        
-        <img src="IMG_5276.jpg" alt="Gallery Image 5" class="grid-image">
-        <img src="IMG_5277.jpg" alt="Gallery Image 6" class="grid-image">
-        <img src="handz.png" alt="Gallery Image 7" class="grid-image">
-        
-         <img src="skulss.png" alt="Gallery Image 4" class="grid-image">
-        <img src="ksjedfh.png" alt="Gallery Image 8" class="grid-image">
-        <img src="B6FF982B-213F-4736-B75E-92B9892B10BB.jpg" alt="Gallery Image 9" class="grid-image">
-        
-        <img src="vog.png" alt="Gallery Image 9" class="grid-image">
-           <img src="wingzzz.png" alt="Gallery Image 9" class="grid-image">
-         <img src="ljgowg.png" alt="Gallery Image 9" class="grid-image">
-        
-                 <img src="Screenshot 2026-01-04 183949.png" alt="Gallery Image 9" class="grid-image">
-        
-           <img src="cyberr.png" alt="Gallery Image 9" class="grid-image">
-           <img src="ghr.png" alt="Gallery Image 9" class="grid-image">
-        
-             <img src="iujb.png" alt="Gallery Image 9" class="grid-image">
-        
-             <img src="sljdfn.png" alt="Gallery Image 9" class="grid-image">
-        
-             <img src="black.png" alt="Gallery Image 9" class="grid-image">
-        
-             <img src="qo.png" alt="Gallery Image 9" class="grid-image">
-        
-        
-             <img src="laknfe.png" alt="Gallery Image 9" class="grid-image">
-        
-          <img src="v.png" alt="Gallery Image 9" class="grid-image">
-          <img src="corpse.png" alt="Gallery Image 9" class="grid-image">
-          <img src="men.png" alt="Gallery Image 9" class="grid-image">
-          <img src="stone.png" alt="Gallery Image 9" class="grid-image">
-        
-          <img src="skuls.png" alt="Gallery Image 9" class="grid-image">
-          <img src="eyz.png" alt="Gallery Image 9" class="grid-image">
-          <img src="s1.png" alt="Gallery Image 9" class="grid-image">
-          <img src="s2.png" alt="Gallery Image 9" class="grid-image">
-        
-         <img src="heie.png" alt="Gallery Image 9" class="grid-image">
-         <img src="wowww.png" alt="Gallery Image 9" class="grid-image">
-          <img src="nbluee.png" alt="Gallery Image 9" class="grid-image">
-        
-        
-        
-        <img src="Screenshot 2026-01-04 181814.png" alt="Gallery Image 10" class="grid-image">
+      <div class="masonry" id="gallery">
+
+        <div class="masonry-item"><img src="fishy skull.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="Screenshot 2026-01-04 181458.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="Screenshot 2026-01-04 181523.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="Screenshot 2026-01-04 181538.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="IMG_5276.jpg" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="IMG_5277.jpg" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="handz.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="skulss.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="ksjedfh.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="B6FF982B-213F-4736-B75E-92B9892B10BB.jpg" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="vog.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="wingzzz.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="ljgowg.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="Screenshot 2026-01-04 183949.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="cyberr.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="ghr.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="iujb.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="sljdfn.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="black.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="qo.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="laknfe.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="v.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="corpse.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="men.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="stone.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="skuls.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="eyz.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="s1.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="s2.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="heie.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="wowww.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
+        <div class="masonry-item"><img src="nbluee.png" alt="Art"><div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div></div>
+
       </div>
+
+      <!-- Wide banner image — full-width below masonry -->
+      <div class="masonry-item banner-item" id="bannerItem">
+        <img src="Screenshot 2026-01-04 181814.png" alt="Art">
+        <div class="expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div>
+      </div>
+
     </div>
-  </div>
-</div>
+
+    <!-- LIGHTBOX with prev/next -->
+    <div class="lightbox" id="lightbox">
+      <button class="lightbox-close" id="lightboxClose">&#x2715;</button>
+      <button class="lightbox-nav" id="lightboxPrev">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="lightbox-img-wrap">
+        <img id="lightboxImg" src="" alt="">
+      </div>
+      <button class="lightbox-nav" id="lightboxNext">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+      <div class="lightbox-counter" id="lightboxCounter"></div>
+    </div>
+
     <script>
-      const cursor = document.querySelector('.custom-cursor');
-      const cursorRing = document.querySelector('.cursor-ring');
-      let mouseX = 0;
-      let mouseY = 0;
-      let ringX = 0;
-      let ringY = 0;
-
-      document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-
-        cursor.style.left = mouseX + 'px';
-        cursor.style.top = mouseY + 'px';
-
-        if (Math.random() > 0.85) {
-          createSparkle(mouseX, mouseY);
-        }
-      });
-
-      function animateRing() {
-        ringX += (mouseX - ringX) * 0.15;
-        ringY += (mouseY - ringY) * 0.15;
-
-        cursorRing.style.left = (ringX - 20) + 'px';
-        cursorRing.style.top = (ringY - 20) + 'px';
-
-        requestAnimationFrame(animateRing);
-      }
+      const cursor=document.querySelector('.custom-cursor');const cursorRing=document.querySelector('.cursor-ring');
+      let mouseX=0,mouseY=0,ringX=0,ringY=0;
+      document.addEventListener('mousemove',(e)=>{mouseX=e.clientX;mouseY=e.clientY;cursor.style.left=mouseX+'px';cursor.style.top=mouseY+'px';if(Math.random()>0.85)createSparkle(mouseX,mouseY);});
+      function animateRing(){ringX+=(mouseX-ringX)*0.15;ringY+=(mouseY-ringY)*0.15;cursorRing.style.left=(ringX-20)+'px';cursorRing.style.top=(ringY-20)+'px';requestAnimationFrame(animateRing);}
       animateRing();
+      function createSparkle(x,y){const s=document.createElement('div');s.className='cursor-sparkle';s.style.left=x+'px';s.style.top=y+'px';document.body.appendChild(s);setTimeout(()=>s.remove(),800);}
+      document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>{cursor.classList.add('hover');cursorRing.classList.add('hover');});el.addEventListener('mouseleave',()=>{cursor.classList.remove('hover');cursorRing.classList.remove('hover');});});
+    </script>
 
-      function createSparkle(x, y) {
-        const sparkle = document.createElement('div');
-        sparkle.className = 'cursor-sparkle';
-        sparkle.style.left = x + 'px';
-        sparkle.style.top = y + 'px';
-        document.body.appendChild(sparkle);
+    <script>
+      // LIGHTBOX with keyboard + prev/next
+      const lightbox=document.getElementById('lightbox');
+      const lightboxImg=document.getElementById('lightboxImg');
+      const lightboxClose=document.getElementById('lightboxClose');
+      const lightboxPrev=document.getElementById('lightboxPrev');
+      const lightboxNext=document.getElementById('lightboxNext');
+      const lightboxCounter=document.getElementById('lightboxCounter');
 
-        setTimeout(() => sparkle.remove(), 800);
+      const allImgs = Array.from(document.querySelectorAll('.masonry-item img'));
+      let currentIndex = 0;
+
+      function openLightbox(index) {
+        currentIndex = index;
+        lightboxImg.src = allImgs[currentIndex].src;
+        lightboxImg.alt = allImgs[currentIndex].alt;
+        lightboxCounter.textContent = (currentIndex + 1) + ' / ' + allImgs.length;
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
       }
 
-      const interactiveElements = document.querySelectorAll('a, button');
+      function closeLightbox() {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+      }
 
-      interactiveElements.forEach(el => {
-        el.addEventListener('mouseenter', () => {
-          cursor.classList.add('hover');
-          cursorRing.classList.add('hover');
-        });
+      function prevImage() {
+        currentIndex = (currentIndex - 1 + allImgs.length) % allImgs.length;
+        lightboxImg.style.opacity = '0';
+        setTimeout(() => {
+          lightboxImg.src = allImgs[currentIndex].src;
+          lightboxCounter.textContent = (currentIndex + 1) + ' / ' + allImgs.length;
+          lightboxImg.style.opacity = '1';
+        }, 150);
+      }
 
-        el.addEventListener('mouseleave', () => {
-          cursor.classList.remove('hover');
-          cursorRing.classList.remove('hover');
-        });
+      function nextImage() {
+        currentIndex = (currentIndex + 1) % allImgs.length;
+        lightboxImg.style.opacity = '0';
+        setTimeout(() => {
+          lightboxImg.src = allImgs[currentIndex].src;
+          lightboxCounter.textContent = (currentIndex + 1) + ' / ' + allImgs.length;
+          lightboxImg.style.opacity = '1';
+        }, 150);
+      }
+
+      lightboxImg.style.transition = 'opacity 0.15s ease';
+
+      allImgs.forEach((img, i) => {
+        img.parentElement.addEventListener('click', () => openLightbox(i));
+      });
+
+      lightboxClose.addEventListener('click', closeLightbox);
+      lightboxPrev.addEventListener('click', prevImage);
+      lightboxNext.addEventListener('click', nextImage);
+      lightbox.addEventListener('click', (e) => { if(e.target === lightbox) closeLightbox(); });
+      document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('active')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') prevImage();
+        if (e.key === 'ArrowRight') nextImage();
       });
     </script>
 
     <script>
-      // Starfield animation
-      const canvas = document.getElementById('starfield');
-      const ctx = canvas.getContext('2d');
-
-      let stars = [];
-      let shootingStars = [];
-      let scrollY = 0;
-
-      function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        initStars();
-      }
-
-      function initStars() {
-        stars = [];
-        const numStars = 400;
-
-        for (let i = 0; i < numStars; i++) {
-          const rand = Math.random();
-          let size;
-          if (rand < 0.7) {
-            size = Math.random() * 0.8 + 0.3;
-          } else if (rand < 0.9) {
-            size = Math.random() * 1.2 + 0.8;
-          } else {
-            size = Math.random() * 1.8 + 1.2;
-          }
-
-          stars.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height * 3,
-            size: size,
-            speed: Math.random() * 0.5 + 0.1,
-            brightness: Math.random() * 0.3 + 0.25,
-            twinkle: Math.random() * Math.PI * 2,
-            twinkleSpeed: Math.random() * 0.02 + 0.01
-          });
-        }
-      }
-
-      function createShootingStar() {
-        const side = Math.random();
-        let startX, startY, endX, endY;
-
-        if (side < 0.5) {
-          startX = Math.random() * canvas.width * 0.3;
-          startY = Math.random() * canvas.height * 0.3;
-          endX = startX + 200 + Math.random() * 300;
-          endY = startY + 200 + Math.random() * 300;
-        } else {
-          startX = canvas.width * 0.7 + Math.random() * canvas.width * 0.3;
-          startY = Math.random() * canvas.height * 0.3;
-          endX = startX - 200 - Math.random() * 300;
-          endY = startY + 200 + Math.random() * 300;
-        }
-
-        shootingStars.push({
-          x: startX,
-          y: startY,
-          endX: endX,
-          endY: endY,
-          progress: 0,
-          speed: 0.015 + Math.random() * 0.01,
-          opacity: 1
-        });
-      }
-
-      function drawShootingStars() {
-        shootingStars.forEach((star, index) => {
-          star.progress += star.speed;
-
-          if (star.progress > 1) {
-            star.opacity -= 0.05;
-          }
-
-          if (star.opacity <= 0) {
-            shootingStars.splice(index, 1);
-            return;
-          }
-
-          const currentX = star.x + (star.endX - star.x) * star.progress;
-          const currentY = star.y + (star.endY - star.y) * star.progress;
-
-          const tailX = currentX - (star.endX - star.x) * 0.05;
-          const tailY = currentY - (star.endY - star.y) * 0.05;
-
-          const gradient = ctx.createLinearGradient(tailX, tailY, currentX, currentY);
-          gradient.addColorStop(0, `rgba(255, 255, 255, 0)`);
-          gradient.addColorStop(0.5, `rgba(255, 255, 255, ${0.3 * star.opacity})`);
-          gradient.addColorStop(1, `rgba(255, 255, 255, ${0.8 * star.opacity})`);
-
-          ctx.beginPath();
-          ctx.moveTo(tailX, tailY);
-          ctx.lineTo(currentX, currentY);
-          ctx.strokeStyle = gradient;
-          ctx.lineWidth = 2;
-          ctx.stroke();
-
-          ctx.beginPath();
-          ctx.arc(currentX, currentY, 2, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
-          ctx.shadowBlur = 10;
-          ctx.shadowColor = '#fff';
-          ctx.fill();
-          ctx.shadowBlur = 0;
-        });
-      }
-
-      function drawStars() {
-        ctx.fillStyle = '#000';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        stars.forEach(star => {
-          const yPos = (star.y - scrollY * star.speed) % (canvas.height + 500);
-
-          star.twinkle += star.twinkleSpeed;
-          const twinkleFactor = 0.8 + Math.sin(star.twinkle) * 0.2;
-
-          ctx.beginPath();
-          ctx.arc(star.x, yPos, star.size, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255, 255, 255, ${star.brightness * twinkleFactor})`;
-          ctx.fill();
-
-          if (star.size > 1) {
-            ctx.shadowBlur = 4 * twinkleFactor;
-            ctx.shadowColor = '#fff';
-            ctx.fill();
-            ctx.shadowBlur = 0;
-          }
-        });
-
-        drawShootingStars();
-      }
-
-      function animate() {
-        drawStars();
-        requestAnimationFrame(animate);
-      }
-
-      window.addEventListener('scroll', () => {
-        scrollY = window.scrollY;
-      });
-
-      window.addEventListener('resize', resizeCanvas);
-
-      resizeCanvas();
-      animate();
-
-      setInterval(() => {
-        if (Math.random() > 0.3) {
-          createShootingStar();
-        }
-      }, 8000);
+      const canvas=document.getElementById('starfield');const ctx=canvas.getContext('2d');
+      let stars=[],shootingStars=[],scrollY=0;
+      function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;initStars();}
+      function initStars(){stars=[];for(let i=0;i<400;i++){const r=Math.random();let size=r<0.7?Math.random()*0.8+0.3:r<0.9?Math.random()*1.2+0.8:Math.random()*1.8+1.2;stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height*3,size,speed:Math.random()*0.5+0.1,brightness:Math.random()*0.3+0.25,twinkle:Math.random()*Math.PI*2,twinkleSpeed:Math.random()*0.02+0.01});}}
+      function createShootingStar(){const s=Math.random();let sx=s<0.5?Math.random()*canvas.width*0.3:canvas.width*0.7+Math.random()*canvas.width*0.3,sy=Math.random()*canvas.height*0.3;shootingStars.push({x:sx,y:sy,endX:s<0.5?sx+200+Math.random()*300:sx-200-Math.random()*300,endY:sy+200+Math.random()*300,progress:0,speed:0.015+Math.random()*0.01,opacity:1});}
+      function drawShootingStars(){shootingStars.forEach((star,i)=>{star.progress+=star.speed;if(star.progress>1)star.opacity-=0.05;if(star.opacity<=0){shootingStars.splice(i,1);return;}const cx=star.x+(star.endX-star.x)*star.progress,cy=star.y+(star.endY-star.y)*star.progress,tx=cx-(star.endX-star.x)*0.05,ty=cy-(star.endY-star.y)*0.05;const g=ctx.createLinearGradient(tx,ty,cx,cy);g.addColorStop(0,'rgba(255,255,255,0)');g.addColorStop(0.5,`rgba(255,255,255,${0.3*star.opacity})`);g.addColorStop(1,`rgba(255,255,255,${0.8*star.opacity})`);ctx.beginPath();ctx.moveTo(tx,ty);ctx.lineTo(cx,cy);ctx.strokeStyle=g;ctx.lineWidth=2;ctx.stroke();ctx.beginPath();ctx.arc(cx,cy,2,0,Math.PI*2);ctx.fillStyle=`rgba(255,255,255,${star.opacity})`;ctx.shadowBlur=10;ctx.shadowColor='#fff';ctx.fill();ctx.shadowBlur=0;});}
+      function drawStars(){ctx.fillStyle='#000';ctx.fillRect(0,0,canvas.width,canvas.height);stars.forEach(star=>{const yPos=(star.y-scrollY*star.speed)%(canvas.height+500);star.twinkle+=star.twinkleSpeed;const tf=0.8+Math.sin(star.twinkle)*0.2;ctx.beginPath();ctx.arc(star.x,yPos,star.size,0,Math.PI*2);ctx.fillStyle=`rgba(255,255,255,${star.brightness*tf})`;ctx.fill();if(star.size>1){ctx.shadowBlur=4*tf;ctx.shadowColor='#fff';ctx.fill();ctx.shadowBlur=0;}});drawShootingStars();}
+      function animate(){drawStars();requestAnimationFrame(animate);}
+      window.addEventListener('scroll',()=>{scrollY=window.scrollY;});
+      window.addEventListener('resize',resizeCanvas);
+      resizeCanvas();animate();
+      setInterval(()=>{if(Math.random()>0.3)createShootingStar();},8000);
     </script>
 
-  <script>
-  // Scroll progress indicator
-  const progressLine = document.querySelector('.progress-line');
-  const progressGlow = document.querySelector('.progress-glow');
-
-  function updateProgress() {
-    const windowHeight = window.innerHeight;
-    const documentHeight = document.documentElement.scrollHeight;
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    
-    const scrollPercent = (scrollTop / (documentHeight - windowHeight)) * 100;
-    
-    progressLine.style.height = scrollPercent + '%';
-    
-    if (scrollPercent > 2) {
-      progressGlow.style.opacity = '1';
-      progressGlow.style.bottom = (100 - scrollPercent) + '%';
-    } else {
-      progressGlow.style.opacity = '0';
-    }
-  }
-
-  window.addEventListener('scroll', updateProgress);
-  window.addEventListener('resize', updateProgress);
-  
-  updateProgress();
-</script>
-    
-     <!-- Image Modal -->
-<div class="modal" id="imageModal">
-  <span class="modal-close">&times;</span>
-  <img class="modal-content" id="modalImage">
-</div>
-  <script>
-  // Image modal functionality
-  const modal = document.getElementById('imageModal');
-  const modalImg = document.getElementById('modalImage');
-  const modalClose = document.querySelector('.modal-close');
-  const gridImages = document.querySelectorAll('.grid-image');
-
-  gridImages.forEach(img => {
-    img.addEventListener('click', function() {
-      modal.classList.add('active');
-      modalImg.src = this.src;
-      document.body.style.overflow = 'hidden';
-    });
-  });
-
-  function closeModal() {
-    modal.classList.remove('active');
-    document.body.style.overflow = 'auto';
-  }
-
-  modalClose.addEventListener('click', closeModal);
-
-  modal.addEventListener('click', function(e) {
-    if (e.target === modal) {
-      closeModal();
-    }
-  });
-
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && modal.classList.contains('active')) {
-      closeModal();
-    }
-  });
-</script>
- 
-    </div>
+    <script>
+      const progressLine=document.querySelector('.progress-line');const progressGlow=document.querySelector('.progress-glow');
+      function updateProgress(){const pct=(window.pageYOffset/(document.documentElement.scrollHeight-window.innerHeight))*100;progressLine.style.height=pct+'%';progressGlow.style.opacity=pct>2?'1':'0';progressGlow.style.bottom=(100-pct)+'%';}
+      window.addEventListener('scroll',updateProgress);window.addEventListener('resize',updateProgress);updateProgress();
+    </script>
   </body>
 </html>
