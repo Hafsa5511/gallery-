@@ -162,6 +162,450 @@
         font-size: 12px; letter-spacing: 2px; color: rgba(255,169,88,0.4);
         z-index: 200001;
       }
+    
+  *{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    cursor:none !important;
+  }
+
+  body{
+    background:#000;
+    color:#fff;
+    font-family:'Ysabeau Infant',sans-serif;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+
+  @font-face{
+    font-family:'TheScientist';
+    src:url('TheScientist-L3EyW.ttf') format('truetype');
+  }
+
+  /* ---------- GLOBAL LAYOUT ---------- */
+
+  .page-wrapper{
+    max-width:1200px;
+    margin:0 auto;
+    padding:0 60px 100px;
+    position:relative;
+  }
+
+  .container{
+    width:100%;
+  }
+
+  .project-content{
+    padding:120px 0 100px;
+  }
+
+  .project-header{
+    margin-bottom:100px;
+  }
+
+  .project-title{
+    font-family:'TheScientist',cursive;
+    font-size:52px;
+    line-height:1.1;
+    color:rgba(255,169,88,1);
+    margin-bottom:14px;
+  }
+
+  .project-meta{
+    font-size:13px;
+    letter-spacing:0.5px;
+    color:rgba(255,169,88,0.55);
+    margin-bottom:32px;
+  }
+
+  .project-description{
+    font-size:16px;
+    line-height:2;
+    color:rgba(255,255,255,0.78);
+    max-width:700px;
+  }
+
+  .section-title{
+    font-family:'TheScientist',cursive;
+    font-size:36px;
+    color:rgba(255,169,88,1);
+    margin-bottom:32px;
+    margin-top:80px;
+  }
+
+  .image-caption{
+    font-size:13px;
+    color:rgba(255,169,88,0.55);
+    font-style:italic;
+    margin-top:20px;
+  }
+
+  /* ---------- CLOSE BUTTON ---------- */
+
+  .close-btn{
+    position:fixed;
+    top:40px;
+    right:100px;
+    font-size:40px;
+    color:rgba(255,169,88,1);
+    text-decoration:none;
+    z-index:100;
+    transition:transform 0.3s,color 0.3s;
+    font-weight:300;
+    line-height:1;
+  }
+
+  .close-btn:hover{
+    transform:rotate(90deg);
+    color:rgba(255,215,0,1);
+  }
+
+  /* ---------- PROJECT IMAGES ---------- */
+
+  .project-image-section{
+    margin-bottom:100px;
+  }
+
+  .project-image{
+    width:100%;
+    max-width:850px;
+    border-radius:24px;
+    display:block;
+    border:1px solid rgba(255,169,88,0.12);
+    box-shadow:0 20px 60px rgba(0,0,0,0.6);
+  }
+
+  .two-column-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:24px;
+    margin-top:40px;
+  }
+
+  .grid-image{
+    width:100%;
+    border-radius:18px;
+    border:1px solid rgba(255,169,88,0.12);
+    box-shadow:0 10px 40px rgba(0,0,0,0.45);
+  }
+
+  /* ---------- SCALE SECTION ---------- */
+
+  .scale-comparison-section{
+    margin:100px 0;
+    padding:50px;
+    background:rgba(255,255,255,0.02);
+    border-radius:28px;
+    border:1px solid rgba(255,169,88,0.12);
+    backdrop-filter:blur(10px);
+  }
+
+  .scale-description{
+    font-size:14px;
+    color:rgba(255,255,255,0.5);
+    margin-bottom:30px;
+    font-style:italic;
+  }
+
+  .scale-toggles{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-bottom:40px;
+  }
+
+  .scale-btn{
+    padding:11px 24px;
+    background:rgba(255,169,88,0.05);
+    border:1px solid rgba(255,169,88,0.18);
+    color:rgba(255,255,255,0.7);
+    border-radius:100px;
+    transition:all 0.3s ease;
+    font-size:13px;
+    font-family:'Ysabeau Infant',sans-serif;
+  }
+
+  .scale-btn:hover{
+    border-color:rgba(255,169,88,0.5);
+    background:rgba(255,169,88,0.08);
+    transform:translateY(-2px);
+  }
+
+  .scale-btn.active{
+    background:rgba(255,169,88,0.12);
+    border-color:rgba(255,169,88,0.5);
+    color:#fff;
+    box-shadow:0 0 20px rgba(255,169,88,0.12);
+  }
+
+  .scale-display-container{
+    position:relative;
+    min-height:520px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:30px;
+  }
+
+  .scale-display{
+    position:absolute;
+    opacity:0;
+    transform:scale(0.96);
+    transition:all 0.45s ease;
+    pointer-events:none;
+  }
+
+  .scale-display.active{
+    opacity:1;
+    transform:scale(1);
+    pointer-events:auto;
+  }
+
+  .scale-context{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:20px;
+  }
+
+  .scale-image{
+    width:384px;
+    border-radius:12px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.6);
+  }
+
+  .scale-label{
+    font-size:12px;
+    color:rgba(255,169,88,0.6);
+    letter-spacing:0.5px;
+  }
+
+  .scale-insight{
+    padding:22px;
+    background:rgba(255,169,88,0.04);
+    border-left:2px solid rgba(255,169,88,0.4);
+    border-radius:12px;
+    font-size:14px;
+    line-height:1.9;
+    color:rgba(255,255,255,0.72);
+  }
+
+  .scale-insight strong{
+    color:rgba(255,169,88,1);
+  }
+
+  /* ---------- MOCKUP ---------- */
+
+  .mockup-device{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    align-items:center;
+  }
+
+  .mockup-screen{
+    width:600px;
+    background:rgba(20,20,30,0.8);
+    border-radius:18px;
+    padding:24px;
+    border:1px solid rgba(255,169,88,0.12);
+  }
+
+  .mockup-search-bar{
+    background:rgba(255,255,255,0.06);
+    padding:10px 15px;
+    border-radius:10px;
+    margin-bottom:20px;
+  }
+
+  .search-input{
+    font-size:12px;
+    color:rgba(255,255,255,0.45);
+  }
+
+  .mockup-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+  }
+
+  .mockup-book{
+    aspect-ratio:2/3;
+    border-radius:6px;
+    overflow:hidden;
+  }
+
+  .mockup-book.other{
+    background:linear-gradient(
+      135deg,
+      rgba(100,100,120,0.3),
+      rgba(80,80,100,0.3)
+    );
+  }
+
+  .mockup-book.featured{
+    border:2px solid rgba(255,169,88,0.4);
+    box-shadow:0 0 25px rgba(255,169,88,0.18);
+  }
+
+  .mockup-cover{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+
+  /* ---------- SCROLL PROGRESS ---------- */
+
+  .scroll-progress{
+    position:fixed;
+    top:0;
+    right:60px;
+    height:100vh;
+    width:2px;
+    background:rgba(255,215,0,0.08);
+    z-index:50;
+    pointer-events:none;
+  }
+
+  .progress-line{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:0%;
+    background:linear-gradient(
+      180deg,
+      rgba(133,120,150,0.3) 0%,
+      rgba(133,120,150,0.8) 50%,
+      rgba(133,120,150,1) 100%
+    );
+    transition:height 0.1s ease-out;
+  }
+
+  .progress-glow{
+    position:absolute;
+    bottom:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:8px;
+    height:8px;
+    background:rgba(133,120,150,1);
+    border-radius:50%;
+    box-shadow:0 0 15px rgba(133,120,150,0.8);
+    opacity:0;
+    transition:bottom 0.1s ease-out,opacity 0.3s ease-out;
+  }
+
+  /* ---------- CURSOR ---------- */
+
+  .custom-cursor{
+    position:fixed;
+    width:8px;
+    height:8px;
+    background:rgba(255,215,0,0.9);
+    border-radius:50%;
+    pointer-events:none;
+    z-index:10000;
+    transition:transform 0.15s ease-out;
+    box-shadow:
+      0 0 15px rgba(255,215,0,0.6),
+      0 0 25px rgba(255,215,0,0.3);
+  }
+
+  .cursor-ring{
+    position:fixed;
+    width:40px;
+    height:40px;
+    border:1px solid rgba(255,215,0,0.4);
+    border-radius:50%;
+    pointer-events:none;
+    z-index:9999;
+    transition:all 0.2s ease-out;
+  }
+
+  .cursor-sparkle{
+    position:fixed;
+    width:4px;
+    height:4px;
+    background:rgba(255,215,0,0.8);
+    border-radius:50%;
+    pointer-events:none;
+    z-index:9998;
+    animation:sparkle-fade 0.8s ease-out forwards;
+  }
+
+  @keyframes sparkle-fade{
+    0%{
+      opacity:1;
+      transform:scale(1);
+    }
+    100%{
+      opacity:0;
+      transform:scale(0.3);
+    }
+  }
+
+  .cursor-ring.hover{
+    width:60px;
+    height:60px;
+    border-color:rgba(255,215,0,0.7);
+    border-width:2px;
+  }
+
+  .custom-cursor.hover{
+    transform:scale(0.6);
+  }
+
+  /* ---------- STARFIELD ---------- */
+
+  #starfield{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:-1;
+    pointer-events:none;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+
+  @media(max-width:900px){
+
+    .page-wrapper{
+      padding:0 24px 80px;
+    }
+
+    .project-title{
+      font-size:42px;
+    }
+
+    .two-column-grid{
+      grid-template-columns:1fr;
+    }
+
+    .mockup-screen{
+      width:100%;
+    }
+
+    .scale-image{
+      width:280px;
+    }
+
+    .scale-comparison-section{
+      padding:28px;
+    }
+
+    .close-btn{
+      right:30px;
+    }
+
+    .scroll-progress{
+      display:none;
+    }
+  }
+
     </style>
   </head>
   <body>
